@@ -1,0 +1,17 @@
+vunit psl_alu(alu) {
+
+    -- A clock is mandatory
+    -- It allows the prover to work.
+    -- The BMC is not happy with that, so for BMC we should create a wrapper of
+    -- the alu with just an additional clock port
+    signal clk : std_logic;
+
+    -- All is sensitive to rising edge of clk
+    default clock is rising_edge(clk);
+
+    -- Parenthesis are important, else the "or" and "and" cause issue with
+    -- the order of operations
+    assert always ((m = '0') |-> (r = (a or b)));
+    assert always ((m = '1') |-> (r = (a and b)));
+
+}
