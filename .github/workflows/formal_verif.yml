@@ -1,0 +1,19 @@
+on: 
+    # Launch when modifications to the code folder are pushed
+    workflow_dispatch:
+    push:
+        paths:
+        - code/**
+
+jobs:
+    cmake:
+        name: Formal Verification
+        runs-on: linux
+        container: redscalculator/cern-formal
+        env:
+            SRC_FOLDER: "code"
+        steps:
+            - name: Run Formal Verif
+              run: |
+                cd ${SRC_FOLDER}
+                for fld in ./*/; do cd $fld; sby --prefix ../verif_out/ --yosys "yosys -m ghdl" -f scripts/*.sby; cd -; done
