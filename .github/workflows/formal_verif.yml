@@ -16,4 +16,4 @@ jobs:
             - name: Run Formal Verif
               run: |
                 cd ${SRC_FOLDER}
-                for fld in ./*/; do cd $fld; sby --prefix ../verif_out/ --yosys "yosys -m ghdl" -f scripts/*.sby; cd -; done
+                for fld in ./*/; do cd $fld/scripts; sby --prefix ../verif_out/ --yosys "yosys -m ghdl" -f *.sby; cd -; done
