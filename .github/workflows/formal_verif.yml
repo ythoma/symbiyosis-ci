@@ -1,0 +1,30 @@
+name: Formal Verification
+
+on:
+    # Launch when modifications to the code folder are pushed
+    push:
+        paths:
+        - code/**
+    # Allows you to run this workflow manually from the Actions tab
+    workflow_dispatch:
+
+jobs:
+    formal-verif:
+        name: Formal Verification
+        runs-on: ubuntu-latest
+        container: redscalculator/cern-formal
+        env:
+            SRC_FOLDER: "code"
+        steps:
+            # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+            - uses: actions/checkout@v4
+            # Find all .sby scripts in all subfolders of code/ and run them in the parent folder of the script
+            - name: Run Formal Verif
+              run: |
+                cd ${SRC_FOLDER}
+                for sby_path in $(find . -iname "*.sby"); do 
+                    sby_script=${sby_path##*/}
+                    cd ${sby_path%/*}
+                    sby --prefix ../verif_out/ --yosys "yosys -m ghdl" -f $sby_script 
+                    cd -
+                done

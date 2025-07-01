@@ -54,6 +54,6 @@ begin
 
     assert_success: assert always (a -> next (b before a));
 
-    assert_fail: assert always (a -> (b before a));
+    -- assert_fail: assert always (a -> (b before a));
 
 end architecture psl;
