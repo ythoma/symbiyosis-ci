@@ -1,0 +1,23 @@
+on:
+    workflow_dispatch:
+
+jobs:
+    cmake:
+        name: Formal Verification
+        runs-on: linux
+        container: redscalculator/cern-formal
+        env:
+            SRC_FOLDER: "code"
+        steps:
+            - name: Run Formal Verif
+            # Find all .sby scripts in all subfolders of code/ and run them in the parent folder of the script
+              run: |
+                echo "Hello world"
+                echo "Hello YBT"
+#cd ${SRC_FOLDER}
+#for sby_path in $(find . -iname "*.sby"); do
+#    sby_script=${sby_path##*/}
+#    cd ${sby_path%/*}
+#    sby --prefix ../verif_out/ --yosys "yosys -m ghdl" -f $sby_script
+#    cd -
+#done
