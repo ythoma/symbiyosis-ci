@@ -1,15 +1,14 @@
-on:
-    workflow_dispatch:
+on: [workflow_dispatch]
 
 jobs:
     cmake:
-        name: Formal Verification
+        name: Test YBT
         runs-on: linux
-        container: redscalculator/cern-formal
+        container: ubuntu
         env:
             SRC_FOLDER: "code"
         steps:
-            - name: Run Formal Verif
+            - name: Test
             # Find all .sby scripts in all subfolders of code/ and run them in the parent folder of the script
               run: |
                 echo "Hello world"
