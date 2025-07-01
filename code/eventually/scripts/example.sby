@@ -1,6 +1,6 @@
 [tasks]
 cover
-bmc
+# bmc
 prove
 
 [options]
@@ -8,12 +8,12 @@ mode bmc
 depth 20
 
 cover: mode cover
-bmc: mode bmc
+# bmc: mode bmc
 prove: mode prove
 
 [engines]
 cover: smtbmc z3
-bmc: abc bmc3
+# bmc: abc bmc3
 prove: abc pdr
 
 [script]

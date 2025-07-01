@@ -21,6 +21,6 @@ begin
   seq_req : entity work.sequencer generic map ("__-___-__-___") port map (clk, req);
   seq_ack : entity work.sequencer generic map ("____-_____-__") port map (clk, ack);
 
-  assert_success: assert always (req -> eventually! req);
+  assert_success: assert always (req -> eventually! ack);
 
 end architecture psl;
