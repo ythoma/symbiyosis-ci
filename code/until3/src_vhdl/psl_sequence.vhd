@@ -22,7 +22,7 @@ begin
     seq_end1  : entity work.sequencer generic map ("__-_________") port map (clk, end1);
 
     assert_success1: assert always (start -> next(run until end1));
-    -- assert_fail: assert always (start -> next(run until_ end1));
+    /*assert_fail: assert always (start -> next(run until_ end1));*/
 
 
 end architecture psl;
