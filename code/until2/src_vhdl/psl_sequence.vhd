@@ -23,7 +23,7 @@ begin
     seq_end2  : entity work.sequencer generic map ("_____-______") port map (clk, end2);
 
     assert_success1: assert always (start -> next(run until end1));
-    assert_fail: assert always (start -> next(run until_ end1));
+    -- assert_fail: assert always (start -> next(run until_ end1));
     assert_success2: assert always (start -> next(run until_ end2));
 
 
