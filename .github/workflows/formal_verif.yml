@@ -49,6 +49,7 @@ jobs:
                 all_changed_dirs=$(for f in ${ALL_CHANGED_FILES}; do dirname "$f"; done | sort -u)
                 for cdir in $all_changed_dirs; do
                   rcdir="${cdir}/.."
+                  echo "verify folder ${rcdir} ..."
                   for sby_path in $(find $rcdir -iname "*.sby"); do
                       sby_script=${sby_path##*/}
                       cd ${sby_path%/*}
