@@ -13,6 +13,6 @@ end entity alu;
 architecture behave of alu is
 begin
 
-    r <= a or b when m = '1' else a and b;
+    r <= a or b when m = '0' else a and b;
 
 end architecture behave;
