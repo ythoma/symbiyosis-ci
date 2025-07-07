@@ -17,14 +17,37 @@ jobs:
             SRC_FOLDER: "code"
         steps:
             # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-            - uses: actions/checkout@v4
+            - name: Checkout repository
+              uses: actions/checkout@v4
+              with:
+                fetch-depth: 2  # Required to get commit history
+            - name: Get changed files
+              id: changed-files
+              uses: tj-actions/changed-files@v46
+              with:
+                # Avoid using single or double quotes for multiline patterns
+                files: |
+                  **.sby
+                  **.vhd
+            - name: List all changed files
+              env:
+                ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+                ADDED_FILES: ${{ steps.changed-files.outputs.added_files }}
+              run: |
+                for file in ${ALL_CHANGED_FILES}; do
+                  echo "$file was changed"
+                done
+                for file in ${ADDED_FILES}; do
+                  echo "$file was added"
+                done
             # Find all .sby scripts in all subfolders of code/ and run them in the parent folder of the script
             - name: Run Formal Verif
+              if: steps.changed-files.outputs.any_changed == 'true'
               run: |
                 cd ${SRC_FOLDER}
-                for sby_path in $(find . -iname "*.sby"); do 
+                for sby_path in $(find . -iname "*.sby"); do
                     sby_script=${sby_path##*/}
                     cd ${sby_path%/*}
-                    sby --prefix ../verif_out/ --yosys "yosys -m ghdl" -f $sby_script 
+                    sby --prefix ../verif_out/ --yosys "yosys -m ghdl" -f $sby_script
                     cd -
                 done
