@@ -39,8 +39,8 @@ architecture rtl of sequencer is
         variable ret : std_logic;
     begin
         case a is
-            when '0' | '_' => ret := '0';
-            when '1' | '-' => ret := '1';
+            when '0' | '_' => ret := '1';
+            when '1' | '-' => ret := '0';
             when others    => ret := 'X';
         end case;
         return ret;
