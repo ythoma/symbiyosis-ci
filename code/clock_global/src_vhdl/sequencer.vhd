@@ -6,7 +6,7 @@
 --
 -- Description  : Simple sequencer to generate waveforms for a 1 bit
 --                std_logic signals.
---                Inspired by 
+--                Inspired by
 --                https://github.com/tmeissner/psl_with_ghdl/tree/master/src/sequencer.vhd
 --
 -- Author       : Y. Thoma

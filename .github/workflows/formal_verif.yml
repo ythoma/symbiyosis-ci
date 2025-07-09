@@ -16,15 +16,44 @@ jobs:
         env:
             SRC_FOLDER: "code"
         steps:
-            # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-            - uses: actions/checkout@v4
+            - name: Checkout repository
+              uses: actions/checkout@v4
+              with:
+                fetch-depth: 2
+                path: ${{ github.repository }}
+            - name: Get changed files
+              id: changed-files
+              uses: tj-actions/changed-files@v46
+              with:
+                since_last_remote_commit: true
+                #separator: ";"
+                files: |
+                  **.sby
+                  **.vhd
+                path: ${{ github.repository }}
+            - name: List all changed files
+              env:
+                ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+              run: |
+                for f in ${ALL_CHANGED_FILES}; do
+                  d=`dirname $f`
+                  echo "$f was changed (dir $d)"
+                done
             # Find all .sby scripts in all subfolders of code/ and run them in the parent folder of the script
             - name: Run Formal Verif
+              if: steps.changed-files.outputs.any_changed == 'true'
+              env:
+                ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+              working-directory: ${{ github.repository }}
               run: |
-                cd ${SRC_FOLDER}
-                for sby_path in $(find . -iname "*.sby"); do 
-                    sby_script=${sby_path##*/}
-                    cd ${sby_path%/*}
-                    sby --prefix ../verif_out/ --yosys "yosys -m ghdl" -f $sby_script 
-                    cd -
+                all_changed_dirs=$(for f in ${ALL_CHANGED_FILES}; do dirname "$f"; done | sort -u)
+                for cdir in $all_changed_dirs; do
+                  rcdir="${cdir}/.."
+                  echo "verify folder ${rcdir} ..."
+                  for sby_path in $(find $rcdir -iname "*.sby"); do
+                      sby_script=${sby_path##*/}
+                      cd ${sby_path%/*}
+                      sby --prefix ../verif_out/ --yosys "yosys -m ghdl" -f $sby_script
+                      cd -
+                  done
                 done
